@@ -83,21 +83,15 @@ class Sphere():
         # check if inside the sphere
         # (x-xo)^2 + (y-yo)^2 + (z-zo)^2 < r^2
         condition =(x[:, 0] - self.position[0])**2 + (x[:, 1] - self.position[1])**2 + (x[:, 2] - self.position[2])**2 <= self.radius**2
-        
+
         number_of_rays = x.shape[0]
         colors = torch.zeros((number_of_rays, 3))
         density = torch.zeros((number_of_rays, 1))
-
+        
         colors[condition] = self.color #assign color where condition passes
         density[condition] = 10 # assume constant
         
-        #creating a partition on the sphere for visuals
-        color_condition = x[:, 0] < 0
-        temp = colors[color_condition, 0].clone()
-        colors[color_condition, 0] = colors[color_condition, 1].clone()
-        colors[color_condition, 1] = temp
-        
-        return colors, density
+        return colors, density 
      
     
 class Voxels(nn.Module):

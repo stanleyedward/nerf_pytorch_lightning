@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 def ray_generator(height, width, focus):
-    rays_origin = np.zeros_like((height*width, 3))
-    rays_direction = np.zeros_like((height * width, 3)) 
+    rays_origin = np.zeros((height * width, 3))
+    rays_direction = np.zeros((height * width, 3)) 
     
     #coord grid
     u = np.arange(width)
@@ -19,7 +19,7 @@ def ray_generator(height, width, focus):
                      -z), axis=-1) # -ve as were looking down throught -z axis
     
     #normalization
-    rays_direction = dir / np.linalg.norm(dirs, axis=-1, keepdims=True)
+    rays_direction = dirs / np.linalg.norm(dirs, axis=-1, keepdims=True)
     rays_direction = rays_direction.reshape(-1, 3)
     
     return rays_origin, rays_direction
@@ -30,7 +30,7 @@ def plot_rays(origin, direction, t):
     ax = fig.add_subplot(projection='3d')
     
     pt1 = origin
-    pt2 = origin + t * direction #
+    pt2 = origin + t * direction 
     
     for p1, p2 in zip(pt1[::50], pt2[::50]): #plot 1/50
         plt.plot([p1[0], p2[0]], [p1[1], p2[1]], [p1[2], p2[2]])
