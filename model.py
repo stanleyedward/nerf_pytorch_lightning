@@ -17,8 +17,7 @@ class Nerf(nn.Module):
             nn.ReLU(), 
             nn.Linear(hidden_dim, hidden_dim), 
             nn.ReLU(),
-        )
-        
+        ) 
         
         self.block2 = nn.Sequential(
             nn.Linear(hidden_dim + (L_position * (2*3) + 3), hidden_dim), # skip connection iwth positional encodings from input added
