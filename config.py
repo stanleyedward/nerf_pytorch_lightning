@@ -11,3 +11,5 @@ learning_rate = 2e-1
 
 color = [0., 1., 1.] #cyan
 target_color = [1., 0., 1.] #purple
+
+SAVE_DIR = 'images'

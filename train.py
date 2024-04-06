@@ -2,14 +2,22 @@ import torch
 from torch import nn
 import matplotlib.pyplot as plt
 from typing import List
-import tqdm
+from tqdm import tqdm
 import json
+from pathlib import Path
 
 from rendering import rendering
 from model import Sphere
-from config import ORIGIN, RADIUS, HEIGHT, WIDTH
+from config import ORIGIN, RADIUS, HEIGHT, WIDTH, SAVE_DIR
 
-def sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, target_px_colors, optimizer:torch.optim, save_outputs:bool = True) -> List:
+def sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, target_px_colors, optimizer:torch.optim, save_outputs:bool = True, save_dir:str = SAVE_DIR) -> List:
+    
+    images_dir = Path(save_dir)
+    
+    image_save_dir = images_dir / 'sphere_train'
+    image_save_dir.mkdir(parents=True,
+                         exist_ok=True)
+    
     losses = []
     progress_bar = tqdm(
         iterable=range(200),
@@ -45,7 +53,7 @@ def sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, ta
                 plt.axis(False)
                 plt.imshow(img)
                 
-                plt.savefig(f'sphere_img/sphere_epoch_{str(epoch)}.jpg', bbox_inches='tight')
+                plt.savefig(f'{image_save_dir}/sphere_epoch_{str(epoch)}.jpg', bbox_inches='tight')
                 # plt.show()
                 
     if save_outputs: 
@@ -54,7 +62,21 @@ def sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, ta
     return losses
 
 
-def sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, target_px_colors, optimizer:torch.optim, save_outputs:bool = True) -> List:
+def graphing_sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, target_px_colors, optimizer:torch.optim, save_outputs:bool = True, save_dir:str = 'sphere_loss_img') -> List:
+    """train used to obtain the dualplot at "images/sphere_loss_gif"
+
+    Args:
+        color_to_optimize (torch.Tensor): _description_
+        rays_origin (_type_): _description_
+        rays_direction (_type_): _description_
+        target_px_colors (_type_): _description_
+        optimizer (torch.optim): _description_
+        save_outputs (bool, optional): _description_. Defaults to True.
+        save_dir (str, optional): _description_. Defaults to 'sphere_loss_img'.
+
+    Returns:
+        List: _description_
+    """
     with open("sphere_losses.json", 'r') as file:
         t_losses = json.load(file)
     
@@ -83,21 +105,25 @@ def sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, ta
             }
         )
         
-        if epoch % 10 == 0:
-            img = Ax.reshape(HEIGHT, WIDTH, 3).cpu().data.numpy()
-            fig, axs = plt.subplots(1,2, figsize=(20,9))
-            
-            axs[0].imshow(img)
-            axs[0].set_title(f"{current_color}")
-            axs[0].axis(False)
-            
-            axs[1].plot(t_losses)
-            axs[1].scatter(epoch, t_losses[epoch], c='m', label = 'epoch no.')
-            axs[1].set(xlabel = 'epoch', ylabel='loss')
-            axs[1].legend()
-            
-            plt.tight_layout()
-            
-            plt.savefig(f'sphere_img/sphere_epoch_{str(epoch)}.jpg', bbox_inches='tight')
-        
+        if save_outputs:
+            if epoch % 10 == 0:
+                img = Ax.reshape(HEIGHT, WIDTH, 3).cpu().data.numpy()
+                fig, axs = plt.subplots(1,2, figsize=(20,9))
+                
+                axs[0].imshow(img)
+                axs[0].set_title(f"{current_color}")
+                axs[0].axis(False)
+                
+                axs[1].plot(t_losses)
+                axs[1].scatter(epoch, t_losses[epoch], c='m', label = 'epoch no.')
+                axs[1].set(xlabel = 'epoch', ylabel='loss')
+                axs[1].legend()
+                
+                plt.tight_layout()
+                
+                plt.savefig(f'{save_dir}/sphere_epoch_{str(epoch)}.jpg', bbox_inches='tight')
+                plt.show()
+
+    if save_outputs:
         print(f"[INFO] figures saved to 'sphere_img/'")
+    
