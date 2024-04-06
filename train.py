@@ -57,12 +57,12 @@ def sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, ta
                 # plt.show()
                 
     if save_outputs: 
-        print(f"[INFO] figures saved to 'sphere_img/'")
+        print(f"[INFO] figures saved to {image_save_dir}")
         
     return losses
 
 
-def graphing_sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, target_px_colors, optimizer:torch.optim, save_outputs:bool = True, save_dir:str = 'sphere_loss_img') -> List:
+def graphing_sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, target_px_colors, optimizer:torch.optim, save_outputs:bool = True, save_dir:str = SAVE_DIR) -> List:
     """train used to obtain the dualplot at "images/sphere_loss_gif"
 
     Args:
@@ -77,6 +77,12 @@ def graphing_sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_dire
     Returns:
         List: _description_
     """
+
+    images_dir = Path(save_dir)
+    image_save_dir = images_dir / 'sphere_train'
+    image_save_dir.mkdir(parents=True,
+                         exist_ok=True)
+    
     with open("sphere_losses.json", 'r') as file:
         t_losses = json.load(file)
     
@@ -121,9 +127,9 @@ def graphing_sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_dire
                 
                 plt.tight_layout()
                 
-                plt.savefig(f'{save_dir}/sphere_epoch_{str(epoch)}.jpg', bbox_inches='tight')
+                plt.savefig(f'{save_dir}/sphere_epoch_loss_{str(epoch)}.jpg', bbox_inches='tight')
                 plt.show()
 
     if save_outputs:
-        print(f"[INFO] figures saved to 'sphere_img/'")
+        print(f"[INFO] figures saved to {image_save_dir}")
     
