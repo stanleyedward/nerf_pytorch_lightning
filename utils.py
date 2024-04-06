@@ -1,5 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from pathlib import Path
+import torch
 
 def ray_generator(height, width, focus):
     rays_origin = np.zeros((height * width, 3))
@@ -40,3 +42,18 @@ def plot_rays(origin, direction, t):
     plt.ylabel('$Y$ - coord')
     
     plt.show()
+    
+def save_model(model, target_dir, model_name:str):
+    
+    target_dir_path = Path(target_dir)
+    target_dir_path.mkdir(parents=True,
+                          exist_ok=True)
+    
+    assert model_name.endswith(".pth") or model_name.endswith(".pt"), "model_name should end with '.pth' or '.pt'"
+    model_save_path = target_dir_path / model_name
+    
+    #save
+    print(f"[INFO] saving model to : {model_save_path}")
+    torch.save(obj=model.state_dict(),
+               f=model_save_path)
+    
