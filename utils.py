@@ -2,21 +2,22 @@ import numpy as np
 import matplotlib.pyplot as plt
 from pathlib import Path
 import torch
+from typing import Tuple
 
-def ray_generator(height, width, focus):
-    rays_origin = np.zeros((height * width, 3))
-    rays_direction = np.zeros((height * width, 3)) 
+def ray_generator(height:int, width:int, focus:int) -> Tuple[np.ndarray, np.ndarray]:
+    rays_origin: np.ndarray = np.zeros((height * width, 3))
+    rays_direction: np.ndarray = np.zeros((height * width, 3)) 
     
     #coord grid
-    u = np.arange(width)
-    v = np.arange(height)
+    u: np.ndarray = np.arange(width)
+    v: np.ndarray = np.arange(height)
     u,v = np.meshgrid(u, v) # u.shape & v.shape = [H, W]
     
     #direction
-    x = u - (width/2)
-    y = v - (height/2)
-    z = np.ones_like(u) * focus
-    dirs = np.stack((x,
+    x: np.ndarray = u - (width/2)
+    y: np.ndarray = v - (height/2)
+    z: np.ndarray = np.ones_like(u) * focus
+    dirs: np.ndarray = np.stack((x,
                      -y, #-ve as we want y downwards
                      -z), axis=-1) # -ve as were looking down throught -z axis
     
@@ -27,7 +28,7 @@ def ray_generator(height, width, focus):
     return rays_origin, rays_direction
 
 
-def plot_rays(origin, direction, t):
+def plot_rays(origin, direction, t) -> None:
     fig = plt.figure(figsize=(12, 12))
     ax = fig.add_subplot(projection='3d')
     
@@ -43,14 +44,14 @@ def plot_rays(origin, direction, t):
     
     plt.show()
     
-def save_model(model, target_dir, model_name:str):
+def save_model(model:torch.nn.Module, target_dir:str, model_name:str) -> None:
     
-    target_dir_path = Path(target_dir)
+    target_dir_path: Path = Path(target_dir)
     target_dir_path.mkdir(parents=True,
                           exist_ok=True)
     
     assert model_name.endswith(".pth") or model_name.endswith(".pt"), "model_name should end with '.pth' or '.pt'"
-    model_save_path = target_dir_path / model_name
+    model_save_path: Path = target_dir_path / model_name
     
     #save
     print(f"[INFO] saving model to : {model_save_path}")

@@ -9,8 +9,10 @@ from pathlib import Path
 from rendering import rendering
 from model import Sphere
 from config import ORIGIN, RADIUS, HEIGHT, WIDTH, SAVE_DIR
+from loss import mse_loss
 
-def sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, target_px_colors, optimizer:torch.optim, save_outputs:bool = True, save_dir:str = SAVE_DIR) -> List:
+
+def sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, target_px_colors, optimizer:torch.optim, save_outputs:bool = True, save_dir:str = SAVE_DIR) -> List[float]:
     
     images_dir = Path(save_dir)
     
@@ -29,7 +31,7 @@ def sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, ta
         s = Sphere(torch.tensor(ORIGIN), torch.tensor(RADIUS), color_to_optimize)
         Ax = rendering(s, torch.tensor(rays_origin),torch.tensor(rays_direction), 0.8, 1.2, white_background=False)
         
-        loss = ((Ax - target_px_colors)**2).mean()
+        loss = mse_loss(Ax, target_px_colors)
         losses.append(loss.item())
         
         optimizer.zero_grad()
@@ -62,7 +64,7 @@ def sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, ta
     return losses
 
 
-def graphing_sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, target_px_colors, optimizer:torch.optim, save_outputs:bool = True, save_dir:str = SAVE_DIR) -> List:
+def graphing_sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_direction, target_px_colors, optimizer:torch.optim, save_outputs:bool = True, save_dir:str = SAVE_DIR) -> None:
     """train used to obtain the dualplot at "images/sphere_loss_gif"
 
     Args:
@@ -96,7 +98,7 @@ def graphing_sphere_train(color_to_optimize:torch.Tensor, rays_origin, rays_dire
         s = Sphere(torch.tensor(ORIGIN), torch.tensor(RADIUS), color_to_optimize)
         Ax = rendering(s, torch.tensor(rays_origin),torch.tensor(rays_direction), 0.8, 1.2, white_background=False)
         
-        loss = ((Ax - target_px_colors)**2).mean()
+        loss = mse_loss(Ax, target_px_colors)
         
         optimizer.zero_grad()
         loss.backward()
