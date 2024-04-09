@@ -1,7 +1,21 @@
 import torch
 from torch import nn
+import lightning as L
+from loss import mse2psnr, mse_loss
 
-
+class NeRFLightning(L.LightningModule):
+    def __init__(self, learning_rate):
+        super().__init__()
+        self.nerf = Nerf()
+        self.learning_rate = learning_rate
+        
+    def forward(self, xyz, direction):
+        return self.nerf.forward(xyz, direction)
+    
+    def intersect(self, x, direction):
+        return self.nerf.forward(x, direction)
+    
+    
 class Nerf(nn.Module):
     def __init__(self, L_position=10, L_direction=4, hidden_dim=256):
         super(Nerf, self).__init__()

@@ -14,55 +14,60 @@ import lightning as L
 
 
 class LegoDataModule(L.LightningDataModule):
-    def __init__(self, data_dir, img_size:Tuple[int, int] , batch_size, num_workers):
+    def __init__(self, data_dir, img_size: Tuple[int, int], batch_size, num_workers):
         super().__init__()
         self.data_dir = data_dir
         self.img_size = img_size
         self.batch_size = batch_size
         self.num_workers = num_workers
-        
-    def prepare_data(self) -> None:
-        ...
-    
+
+    def prepare_data(self) -> None: ...
+
     def setup(self, stage: str) -> None:
-        if stage == 'fit':
+        if stage == "fit":
             self.lego_train = LegoDataset(
-                root_dir=self.data_dir,
-                split="train",
-                img_shape=self.img_size
+                root_dir=self.data_dir, split="train", img_shape=self.img_size
             )
             self.lego_val = LegoDataset(
-                root_dir=self.data_dir,
-                split="val",
-                img_shape=self.img_size
+                root_dir=self.data_dir, split="val", img_shape=self.img_size
             )
 
-        if stage == 'test':
+        if stage == "test":
             self.lego_test = LegoDataset(
-                root_dir=self.data_dir,
-                split='test',
-                img_shape=self.img_size
+                root_dir=self.data_dir, split="test", img_shape=self.img_size
             )
-        
-        if stage == 'predict':
+
+        if stage == "predict":
             self.lego_pred = LegoDataset(
-                root_dir=self.data_dir,
-                split="val",
-                img_shape=self.img_size
+                root_dir=self.data_dir, split="val", img_shape=self.img_size
             )
-    
+
     def train_dataloader(self) -> TRAIN_DATALOADERS:
-        return DataLoader(self.lego_train, batch_size=self.batch_size, num_workers=self.num_workers, shuffle=True)
-    
+        return DataLoader(
+            self.lego_train,
+            batch_size=self.batch_size,
+            num_workers=self.num_workers,
+            shuffle=True,
+        )
+
     def val_dataloader(self) -> EVAL_DATALOADERS:
-        return DataLoader(self.lego_val, batch_size=1, num_workers=self.num_workers, shuffle=False)
-    
+        return DataLoader(
+            self.lego_val, batch_size=1, num_workers=self.num_workers, shuffle=False
+        )
+
     def test_dataloader(self) -> EVAL_DATALOADERS:
-        return DataLoader(self.lego_test, batch_size=self.batch_size, num_workers=self.num_workers, shuffle=True)
+        return DataLoader(
+            self.lego_test,
+            batch_size=self.batch_size,
+            num_workers=self.num_workers,
+            shuffle=True,
+        )
 
     def predict_dataloader(self) -> EVAL_DATALOADERS:
-        return DataLoader(self.lego_val, batch_size=1, num_workers=self.num_workers, shuffle=False)
-    
+        return DataLoader(
+            self.lego_val, batch_size=1, num_workers=self.num_workers, shuffle=False
+        )
+
 
 class LegoDataset(Dataset):
     def __init__(
