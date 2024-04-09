@@ -2,18 +2,36 @@ import torch
 from torch import nn
 import lightning as L
 from loss import mse2psnr, mse_loss
+from rendering import rendering
 
 class NeRFLightning(L.LightningModule):
-    def __init__(self, learning_rate):
+    def __init__(self, learning_rate, tn, tf, nb_bins):
         super().__init__()
         self.nerf = Nerf()
         self.learning_rate = learning_rate
+        self.tn = tn
+        self.tf = tf
+        self.nb_bins = nb_bins
         
     def forward(self, xyz, direction):
         return self.nerf.forward(xyz, direction)
     
     def intersect(self, x, direction):
         return self.nerf.forward(x, direction)
+    
+    def training_step(self, batch, batch_idx):
+        ...
+    
+    def _common_step(self, batch, batch_idx):
+        rays_origin = batch[:, :3]
+        rays_direction = batch[:, 3:6]
+        target_img = batch[:, 6:]
+        
+        pred = rendering(self, rays_origin, rays_direction, self.tn, self.tf, self.nb_bins, device='cuda')
+        
+    
+    def configure_optimizers(self):
+        return torch.optim.Adam(params=self.nerf.parameters(), lr=self.learning_rate)
     
     
 class Nerf(nn.Module):
