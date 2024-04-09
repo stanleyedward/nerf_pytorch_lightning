@@ -70,3 +70,8 @@ def get_rays(
     rays_direction = rays_direction.reshape(-1, 3)
 
     return torch.tensor(rays_origin), torch.tensor(rays_direction)
+
+def set_seeds(seed: int=42):
+    
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
