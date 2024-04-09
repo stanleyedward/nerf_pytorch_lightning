@@ -13,6 +13,7 @@ class NeRFLightning(L.LightningModule):
         self.tn = tn
         self.tf = tf
         self.nb_bins = nb_bins
+        self.training_step_outputs = []
 
     def forward(self, xyz, direction):
         return self.nerf.forward(xyz, direction)
@@ -34,12 +35,14 @@ class NeRFLightning(L.LightningModule):
             self.nb_bins,
             device="cuda",
         )
+
         loss = mse_loss(pred, target_img)
 
         return loss
 
     def training_step(self, batch, batch_idx):
         loss = self._common_step(batch, batch_idx)
+        self.training_step_outputs.append(loss)
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -61,6 +64,20 @@ class NeRFLightning(L.LightningModule):
 
     def on_train_epoch_end(self) -> None:
         self.scheduler.step()
+
+        avg_loss = (
+            torch.stack([loss for loss in self.training_step_outputs]).mean().item()
+        )
+        avg_psnr = (
+            torch.stack([mse2psnr(loss) for loss in self.training_step_outputs])
+            .mean()
+            .item()
+        )
+
+        self.log("loss", avg_loss)
+        self.log("psnr", avg_psnr)
+
+        self.training_step_outputs.clear()
 
 
 class Nerf(nn.Module):
