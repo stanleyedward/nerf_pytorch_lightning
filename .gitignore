@@ -161,3 +161,4 @@ cython_debug/
 final_images/
 test_img/
 dataset
+test.py
