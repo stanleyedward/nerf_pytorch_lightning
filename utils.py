@@ -54,16 +54,13 @@ def get_ray_directions(height: int, width: int, focus: int):
     return directions
 
 
-def get_rays(
-    height: int, width: int, directions, camera2world = None
-) :
+def get_rays(height: int, width: int, directions, camera2world=None):
     rays_origin = np.zeros((height * width, 3))
     rays_direction = np.zeros((height * width, 3))
 
     if camera2world is not None:
         directions = (camera2world[:3, :3] @ directions[..., None]).squeeze(-1)
         rays_origin += camera2world[:3, 3].numpy()
-            
 
     # normalization
     rays_direction = directions / np.linalg.norm(directions, axis=-1, keepdims=True)
@@ -71,7 +68,8 @@ def get_rays(
 
     return torch.tensor(rays_origin), torch.tensor(rays_direction)
 
-def set_seeds(seed: int=42):
-    
+
+def set_seeds(seed: int = 42):
+
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)

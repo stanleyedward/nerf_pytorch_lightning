@@ -44,7 +44,14 @@ class LegoDataModule(L.LightningDataModule):
 
     def train_dataloader(self) -> TRAIN_DATALOADERS:
         return DataLoader(
-            torch.cat((self.lego_train.all_rays_origin, self.lego_train.all_rays_direction, self.lego_train.all_rgbs), dim=1),
+            torch.cat(
+                (
+                    self.lego_train.all_rays_origin,
+                    self.lego_train.all_rays_direction,
+                    self.lego_train.all_rgbs,
+                ),
+                dim=1,
+            ),
             batch_size=self.batch_size,
             num_workers=self.num_workers,
             shuffle=True,
@@ -52,12 +59,29 @@ class LegoDataModule(L.LightningDataModule):
 
     def val_dataloader(self) -> EVAL_DATALOADERS:
         return DataLoader(
-            torch.cat((self.lego_val.all_rays_origin, self.lego_val.all_rays_direction, self.lego_val.all_rgbs), dim=1), batch_size=1, num_workers=self.num_workers, shuffle=False
+            torch.cat(
+                (
+                    self.lego_val.all_rays_origin,
+                    self.lego_val.all_rays_direction,
+                    self.lego_val.all_rgbs,
+                ),
+                dim=1,
+            ),
+            batch_size=1,
+            num_workers=self.num_workers,
+            shuffle=False,
         )
 
     def test_dataloader(self) -> EVAL_DATALOADERS:
         return DataLoader(
-            torch.cat((self.lego_test.all_rays_origin, self.lego_test.all_rays_direction, self.lego_test.all_rgbs), dim=1),
+            torch.cat(
+                (
+                    self.lego_test.all_rays_origin,
+                    self.lego_test.all_rays_direction,
+                    self.lego_test.all_rgbs,
+                ),
+                dim=1,
+            ),
             batch_size=self.batch_size,
             num_workers=self.num_workers,
             shuffle=True,
@@ -65,7 +89,17 @@ class LegoDataModule(L.LightningDataModule):
 
     def predict_dataloader(self) -> EVAL_DATALOADERS:
         return DataLoader(
-            torch.cat((self.lego_val.all_rays_origin, self.lego_val.all_rays_direction, self.lego_val.all_rgbs), dim=1), batch_size=1, num_workers=self.num_workers, shuffle=False
+            torch.cat(
+                (
+                    self.lego_val.all_rays_origin,
+                    self.lego_val.all_rays_direction,
+                    self.lego_val.all_rgbs,
+                ),
+                dim=1,
+            ),
+            batch_size=1,
+            num_workers=self.num_workers,
+            shuffle=False,
         )
 
 
@@ -121,15 +155,15 @@ class LegoDataset(Dataset):
                 rays_origin, rays_direction = get_rays(
                     self.img_shape[0], self.img_shape[1], self.directions, camera2world
                 )
-                
+
                 self.all_rays_origin.append(rays_origin)
                 self.all_rays_direction.append(rays_direction)
                 self.all_rgbs.append(img)
-            
+
             self.all_rays_origin = torch.cat(self.all_rays_origin, dim=0)
             self.all_rays_direction = torch.cat(self.all_rays_direction, dim=0)
-            self.all_rgbs = torch.cat(self.all_rgbs,0)
-            
+            self.all_rgbs = torch.cat(self.all_rgbs, 0)
+
     def __len__(self):
         if self.split == "val":
             return 1  # valid single image
@@ -168,5 +202,5 @@ class LegoDataset(Dataset):
             }
 
             # sample = torch.cat((rays_origin[idx].reshape(-1, 3), rays_direction[idx].reshape(-1, 3), img[idx].reshape(-1, 3)), dim=1)
-            
+
         return sample
