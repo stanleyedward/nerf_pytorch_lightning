@@ -2,6 +2,5 @@
 - only input the centre rays 
 - to prevent mode collapse and better convegance
 
-2. upload conda env
 
-3. complete training script
+3. complete training scr
