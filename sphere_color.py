@@ -14,7 +14,7 @@ from config import (
     color,
     learning_rate,
 )
-from train import sphere_train
+from sphere_train import sphere_train
 
 
 def main():

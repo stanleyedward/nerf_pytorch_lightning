@@ -48,9 +48,33 @@ class LegoDataModule(L.LightningDataModule):
 
         if self.trainer.current_epoch == 0:
             return DataLoader(
-                torch.cat((self.lego_train.all_rays_origin.reshape(len(self.lego_train), self.lego_train.img_shape[0], self.lego_train.img_shape[1], 3)[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(-1, 3),
-                           self.lego_train.all_rays_direction.reshape(len(self.lego_train), self.lego_train.img_shape[0], self.lego_train.img_shape[1], 3)[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(-1, 3),
-                           self.lego_train.all_rgbs.reshape(len(self.lego_train), self.lego_train.img_shape[0], self.lego_train.img_shape[1], 3)[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(-1, 3)),
+                torch.cat(
+                    (
+                        self.lego_train.all_rays_origin.reshape(
+                            len(self.lego_train),
+                            self.lego_train.img_shape[0],
+                            self.lego_train.img_shape[1],
+                            3,
+                        )[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(
+                            -1, 3
+                        ),
+                        self.lego_train.all_rays_direction.reshape(
+                            len(self.lego_train),
+                            self.lego_train.img_shape[0],
+                            self.lego_train.img_shape[1],
+                            3,
+                        )[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(
+                            -1, 3
+                        ),
+                        self.lego_train.all_rgbs.reshape(
+                            len(self.lego_train),
+                            self.lego_train.img_shape[0],
+                            self.lego_train.img_shape[1],
+                            3,
+                        )[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(
+                            -1, 3
+                        ),
+                    ),
                     dim=1,
                 ),
                 batch_size=self.batch_size,
