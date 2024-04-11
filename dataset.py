@@ -43,19 +43,35 @@ class LegoDataModule(L.LightningDataModule):
             )
 
     def train_dataloader(self) -> TRAIN_DATALOADERS:
-        return DataLoader(
-            torch.cat(
-                (
-                    self.lego_train.all_rays_origin,
-                    self.lego_train.all_rays_direction,
-                    self.lego_train.all_rgbs,
+        image_1_4 = int(self.lego_train.img_shape[0] * (1 / 4))
+        image_3_4 = int(self.lego_train.img_shape[0] * (3 / 4))
+
+        if self.trainer.current_epoch == 0:
+            return DataLoader(
+                torch.cat((self.lego_train.all_rays_origin.reshape(len(self.lego_train), self.lego_train.img_shape[0], self.lego_train.img_shape[1], 3)[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(-1, 3),
+                           self.lego_train.all_rays_direction.reshape(len(self.lego_train), self.lego_train.img_shape[0], self.lego_train.img_shape[1], 3)[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(-1, 3),
+                           self.lego_train.all_rgbs.reshape(len(self.lego_train), self.lego_train.img_shape[0], self.lego_train.img_shape[1], 3)[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(-1, 3)),
+                    dim=1,
                 ),
-                dim=1,
-            ),
-            batch_size=self.batch_size,
-            num_workers=self.num_workers,
-            shuffle=True,
-        )
+                batch_size=self.batch_size,
+                num_workers=self.num_workers,
+                shuffle=True,
+            )
+
+        else:
+            return DataLoader(
+                torch.cat(
+                    (
+                        self.lego_train.all_rays_origin,
+                        self.lego_train.all_rays_direction,
+                        self.lego_train.all_rgbs,
+                    ),
+                    dim=1,
+                ),
+                batch_size=self.batch_size,
+                num_workers=self.num_workers,
+                shuffle=True,
+            )
 
     def val_dataloader(self) -> EVAL_DATALOADERS:
         return DataLoader(
