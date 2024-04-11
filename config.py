@@ -13,3 +13,8 @@ color = [0.0, 1.0, 1.0]  # cyan
 target_color = [1.0, 0.0, 1.0]  # purple
 
 SAVE_DIR = "images"
+
+#data
+DATA_DIR = 'dataset/lego/'
+IMG_SIZE = 200
+BATCH_SIZE = 1024
