@@ -1,3 +1,4 @@
+from lightning.pytorch.utilities.types import TRAIN_DATALOADERS
 import torch
 from torch import nn
 import lightning as L
@@ -20,7 +21,7 @@ class NeRFLightning(L.LightningModule):
 
     def intersect(self, x, direction):
         return self.nerf.forward(x, direction)
-
+            
     def _common_step(self, batch, batch_idx):
         rays_origin = batch[:, :3]
         rays_direction = batch[:, 3:6]
@@ -53,15 +54,6 @@ class NeRFLightning(L.LightningModule):
         loss = self._common_step(batch, batch_idx)
         return loss
 
-    def configure_optimizers(self):
-        optimizer = torch.optim.Adam(
-            params=self.nerf.parameters(), lr=self.learning_rate
-        )
-        self.scheduler = torch.optim.lr_scheduler.MultiStepLR(
-            optimizer, milestones=[5, 10], gamma=0.5
-        )
-        return optimizer
-
     def on_train_epoch_end(self) -> None:
         self.scheduler.step()
 
@@ -79,6 +71,14 @@ class NeRFLightning(L.LightningModule):
 
         self.training_step_outputs.clear()
 
+    def configure_optimizers(self):
+        optimizer = torch.optim.Adam(
+            params=self.nerf.parameters(), lr=self.learning_rate
+        )
+        self.scheduler = torch.optim.lr_scheduler.MultiStepLR(
+            optimizer, milestones=[5, 10], gamma=0.5
+        )
+        return optimizer
 
 class Nerf(nn.Module):
     def __init__(self, L_position=10, L_direction=4, hidden_dim=256):

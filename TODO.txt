@@ -1,6 +1,15 @@
 1. use warmpup dataloader on the first training epoch:
-- only input the centre rays 
-- to prevent mode collapse and better convegance
+- only input the central rays
+- to prevent mode collapse and better convergence
+
+HOW TO DO 1:
+option1:
+- change LightningDataModule and change return of train_dataloader() if current_epoch=0
+- in Trainer add flag reload_dataloader_at_veryepoch=True
+
+option2
+- change LightningModule to check if current_epoch=0 
+- change dataloader manually in training_step itself
 
 
 3. complete training scr
