@@ -1,4 +1,3 @@
-from lightning.pytorch.utilities.types import TRAIN_DATALOADERS
 import torch
 from torch import nn
 import lightning as L
