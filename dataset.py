@@ -28,25 +28,26 @@ class LegoDataModule(L.LightningDataModule):
             self.lego_train = LegoDataset(
                 root_dir=self.data_dir, split="train", img_shape=self.img_size
             )
-            self.lego_val = LegoDataset(
-                root_dir=self.data_dir, split="val", img_shape=self.img_size
-            )
+        #     self.lego_val = LegoDataset(
+        #         root_dir=self.data_dir, split="val", img_shape=self.img_size
+        #     )
 
-        if stage == "test":
-            self.lego_test = LegoDataset(
-                root_dir=self.data_dir, split="test", img_shape=self.img_size
-            )
+        # if stage == "test":
+        #     self.lego_test = LegoDataset(
+        #         root_dir=self.data_dir, split="test", img_shape=self.img_size
+        #     )
 
-        if stage == "predict":
-            self.lego_pred = LegoDataset(
-                root_dir=self.data_dir, split="val", img_shape=self.img_size
-            )
+        # if stage == "predict":
+        #     self.lego_pred = LegoDataset(
+        #         root_dir=self.data_dir, split="val", img_shape=self.img_size
+        #     )
 
     def train_dataloader(self) -> TRAIN_DATALOADERS:
         image_1_4 = int(self.lego_train.img_shape[0] * (1 / 4))
         image_3_4 = int(self.lego_train.img_shape[0] * (3 / 4))
 
         if self.trainer.current_epoch == 0:
+            print("Using warmup dataloader")
             return DataLoader(
                 torch.cat(
                     (
@@ -57,7 +58,7 @@ class LegoDataModule(L.LightningDataModule):
                             3,
                         )[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(
                             -1, 3
-                        ),
+                        ).type(torch.float),
                         self.lego_train.all_rays_direction.reshape(
                             len(self.lego_train),
                             self.lego_train.img_shape[0],
@@ -65,7 +66,7 @@ class LegoDataModule(L.LightningDataModule):
                             3,
                         )[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(
                             -1, 3
-                        ),
+                        ).type(torch.float),
                         self.lego_train.all_rgbs.reshape(
                             len(self.lego_train),
                             self.lego_train.img_shape[0],
@@ -73,7 +74,7 @@ class LegoDataModule(L.LightningDataModule):
                             3,
                         )[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(
                             -1, 3
-                        ),
+                        ).type(torch.float),
                     ),
                     dim=1,
                 ),
@@ -83,12 +84,13 @@ class LegoDataModule(L.LightningDataModule):
             )
 
         else:
+            print("Using regular dataloader")
             return DataLoader(
                 torch.cat(
                     (
-                        self.lego_train.all_rays_origin,
-                        self.lego_train.all_rays_direction,
-                        self.lego_train.all_rgbs,
+                        self.lego_train.all_rays_origin.type(torch.float),
+                        self.lego_train.all_rays_direction.type(torch.float),
+                        self.lego_train.all_rgbs.type(torch.float),
                     ),
                     dim=1,
                 ),
@@ -97,50 +99,50 @@ class LegoDataModule(L.LightningDataModule):
                 shuffle=True,
             )
 
-    def val_dataloader(self) -> EVAL_DATALOADERS:
-        return DataLoader(
-            torch.cat(
-                (
-                    self.lego_val.all_rays_origin,
-                    self.lego_val.all_rays_direction,
-                    self.lego_val.all_rgbs,
-                ),
-                dim=1,
-            ),
-            batch_size=1,
-            num_workers=self.num_workers,
-            shuffle=False,
-        )
+    # def val_dataloader(self) -> EVAL_DATALOADERS:
+    #     return DataLoader(
+    #         torch.cat(
+    #             (
+    #                 self.lego_val.all_rays_origin.type(torch.float),
+    #                 self.lego_val.all_rays_direction.type(torch.float),
+    #                 self.lego_val.all_rgbs.type(torch.float),
+    #             ),
+    #             dim=1,
+    #         ),
+    #         batch_size=1,
+    #         num_workers=self.num_workers,
+    #         shuffle=False,
+    #     )
 
-    def test_dataloader(self) -> EVAL_DATALOADERS:
-        return DataLoader(
-            torch.cat(
-                (
-                    self.lego_test.all_rays_origin,
-                    self.lego_test.all_rays_direction,
-                    self.lego_test.all_rgbs,
-                ),
-                dim=1,
-            ),
-            batch_size=self.batch_size,
-            num_workers=self.num_workers,
-            shuffle=True,
-        )
+    # def test_dataloader(self) -> EVAL_DATALOADERS:
+    #     return DataLoader(
+    #         torch.cat(
+    #             (
+    #                 self.lego_test.all_rays_origin.type(torch.float),
+    #                 self.lego_test.all_rays_direction.type(torch.float),
+    #                 self.lego_test.all_rgbs.type(torch.float),
+    #             ),
+    #             dim=1,
+    #         ),
+    #         batch_size=self.batch_size,
+    #         num_workers=self.num_workers,
+    #         shuffle=True,
+    #     )
 
-    def predict_dataloader(self) -> EVAL_DATALOADERS:
-        return DataLoader(
-            torch.cat(
-                (
-                    self.lego_val.all_rays_origin,
-                    self.lego_val.all_rays_direction,
-                    self.lego_val.all_rgbs,
-                ),
-                dim=1,
-            ),
-            batch_size=1,
-            num_workers=self.num_workers,
-            shuffle=False,
-        )
+    # def predict_dataloader(self) -> EVAL_DATALOADERS:
+    #     return DataLoader(
+    #         torch.cat(
+    #             (
+    #                 self.lego_val.all_rays_origin.type(torch.float),
+    #                 self.lego_val.all_rays_direction.type(torch.float),
+    #                 self.lego_val.all_rgbs.type(torch.float),
+    #             ),
+    #             dim=1,
+    #         ),
+    #         batch_size=1,
+    #         num_workers=self.num_workers,
+    #         shuffle=False,
+    #     )
 
 
 class LegoDataset(Dataset):
@@ -213,9 +215,9 @@ class LegoDataset(Dataset):
         if self.split == "train":
             # Use data in buffers
             sample = {
-                "rays_origin": self.all_rays_origin[idx],
-                "rays_direction": self.all_rays_direction[idx],
-                "rgbs": self.all_rgbs[idx],
+                "rays_origin": self.all_rays_origin.reshape(len(self),self.img_shape[0], self.img_shape[1], 3)[idx],
+                "rays_direction": self.all_rays_direction.reshape(len(self),self.img_shape[0], self.img_shape[1], 3)[idx],
+                "rgbs": self.all_rgbs.reshape(len(self),self.img_shape[0], self.img_shape[1], 3)[idx],
             }
             # sample = torch.cat((self.all_rays_origin[idx].reshape(-1, 3), self.all_rays_direction[idx].reshape(-1, 3), self.all_rgbs[idx].reshape(-1, 3)), dim=1)
         else:
@@ -235,10 +237,10 @@ class LegoDataset(Dataset):
             )
 
             sample = {
-                "rays_origin": rays_origin,
-                "rays_direction": rays_direction,
-                "rgbs": img,
-                "c2w": camera2world,
+                "rays_origin": rays_origin.reshape(self.img_shape[0],self.img_shape[1], 3),
+                "rays_direction": rays_direction.reshape(self.img_shape[0],self.img_shape[1], 3),
+                "rgbs": img.reshape(self.img_shape[0],self.img_shape[1], 3),
+                # "c2w": camera2world.reshape(self.img_shape[0],self.img_shape[1],3),
             }
 
             # sample = torch.cat((rays_origin[idx].reshape(-1, 3), rays_direction[idx].reshape(-1, 3), img[idx].reshape(-1, 3)), dim=1)
