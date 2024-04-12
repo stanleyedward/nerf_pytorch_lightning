@@ -1,7 +1,7 @@
 #user
 final_images/
 test_img/
-dataset
+dataset/lego/
 test.py
 test.
 lightning_logs/
