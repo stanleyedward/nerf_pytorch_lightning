@@ -45,6 +45,8 @@ class NeRFLightning(L.LightningModule):
     def training_step(self, batch, batch_idx):
         loss = self._common_step(batch, batch_idx)
         self.training_step_outputs.append(loss)
+        self.log("loss", loss, prog_bar=True)
+        
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -56,19 +58,20 @@ class NeRFLightning(L.LightningModule):
         return loss
 
     def on_train_epoch_end(self) -> None:
+        print("[INFO] Scheduler Step.")
         self.scheduler.step()
 
-        avg_loss = (
-            torch.stack([loss for loss in self.training_step_outputs]).mean().item()
-        )
+        # avg_loss = (
+        #     torch.stack([loss for loss in self.training_step_outputs]).mean().item()
+        # )
         avg_psnr = (
             torch.stack([mse2psnr(loss) for loss in self.training_step_outputs])
             .mean()
             .item()
         )
 
-        self.log("loss", avg_loss)
-        self.log("psnr", avg_psnr)
+        # self.log("loss", avg_loss)
+        self.log("psnr", avg_psnr, prog_bar=True)
 
         self.training_step_outputs.clear()
 
@@ -77,7 +80,7 @@ class NeRFLightning(L.LightningModule):
             params=self.nerf.parameters(), lr=self.learning_rate
         )
         self.scheduler = torch.optim.lr_scheduler.MultiStepLR(
-            optimizer, milestones=[5, 10], gamma=self.gamma
+            optimizer, milestones=[2, 4, 8], gamma=self.gamma
         )
         return optimizer
 

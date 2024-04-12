@@ -59,6 +59,7 @@ class LegoDataModule(L.LightningDataModule):
                         )[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(
                             -1, 3
                         ).type(torch.float),
+                        
                         self.lego_train.all_rays_direction.reshape(
                             len(self.lego_train),
                             self.lego_train.img_shape[0],
@@ -67,6 +68,7 @@ class LegoDataModule(L.LightningDataModule):
                         )[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(
                             -1, 3
                         ).type(torch.float),
+                        
                         self.lego_train.all_rgbs.reshape(
                             len(self.lego_train),
                             self.lego_train.img_shape[0],

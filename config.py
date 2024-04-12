@@ -16,7 +16,7 @@ SAVE_DIR = "images"
 
 #data
 DATA_DIR = 'dataset/lego/'
-IMG_SIZE = 200
+IMG_SIZE = 400
 BATCH_SIZE = 1024
 
 #model
