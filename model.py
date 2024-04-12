@@ -58,7 +58,7 @@ class NeRFLightning(L.LightningModule):
         return loss
 
     def on_train_epoch_end(self) -> None:
-        print("[INFO] Scheduler Step.")
+        print("\n[INFO] Scheduler Step")
         self.scheduler.step()
 
         # avg_loss = (

@@ -47,7 +47,7 @@ class LegoDataModule(L.LightningDataModule):
         image_3_4 = int(self.lego_train.img_shape[0] * (3 / 4))
 
         if self.trainer.current_epoch == 0:
-            print("Using warmup dataloader")
+            print("\n[INFO] Warmup Dataloader")
             return DataLoader(
                 torch.cat(
                     (
@@ -86,7 +86,7 @@ class LegoDataModule(L.LightningDataModule):
             )
 
         else:
-            print("Using regular dataloader")
+            print("\n[INFO] Regular Dataloader")
             return DataLoader(
                 torch.cat(
                     (

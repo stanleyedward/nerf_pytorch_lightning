@@ -4,7 +4,8 @@ test_img/
 dataset
 test.py
 test.
-lightning_logs
+lightning_logs/
+logs/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
