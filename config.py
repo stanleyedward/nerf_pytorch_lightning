@@ -14,20 +14,20 @@ target_color = [1.0, 0.0, 1.0]  # purple
 
 SAVE_DIR = "images"
 
-#data
-DATA_DIR = 'dataset/lego/'
+# data
+DATA_DIR = "dataset/lego/"
 IMG_SIZE = 400
 BATCH_SIZE = 1024
 
-#model
+# model
 LEARNING_RATE = 1e-3
 TN = 2
 TF = 6
 NB_BINS = 100
 GAMMA = 0.5
 
-#trainer
-ACCELERATOR = 'gpu'
+# trainer
+ACCELERATOR = "gpu"
 DEVICES = [0]  # int(torch.cuda.isavailable())
 MAX_EPOCHS = 16
 PRECISION = "32"

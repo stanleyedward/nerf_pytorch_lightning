@@ -7,7 +7,7 @@ from rendering import rendering
 
 
 class NeRFLightning(L.LightningModule):
-    def __init__(self, learning_rate = 1e-3, tn = 2.0, tf = 6.0, nb_bins = 100, gamma = 0.5):
+    def __init__(self, learning_rate=1e-3, tn=2.0, tf=6.0, nb_bins=100, gamma=0.5):
         super().__init__()
         self.nerf = Nerf()
         self.learning_rate = learning_rate
@@ -22,7 +22,7 @@ class NeRFLightning(L.LightningModule):
 
     def intersect(self, x, direction):
         return self.nerf.forward(x, direction)
-            
+
     def _common_step(self, batch, batch_idx):
         rays_origin = batch[:, :3]
         rays_direction = batch[:, 3:6]
@@ -46,7 +46,7 @@ class NeRFLightning(L.LightningModule):
         loss = self._common_step(batch, batch_idx)
         self.training_step_outputs.append(loss)
         self.log("loss", loss, prog_bar=True)
-        
+
         return loss
 
     def validation_step(self, batch, batch_idx):
@@ -83,6 +83,7 @@ class NeRFLightning(L.LightningModule):
             optimizer, milestones=[2, 4, 8], gamma=self.gamma
         )
         return optimizer
+
 
 class Nerf(nn.Module):
     def __init__(self, L_position=10, L_direction=4, hidden_dim=256):

@@ -56,27 +56,25 @@ class LegoDataModule(L.LightningDataModule):
                             self.lego_train.img_shape[0],
                             self.lego_train.img_shape[1],
                             3,
-                        )[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(
-                            -1, 3
-                        ).type(torch.float),
-                        
+                        )[:, image_1_4:image_3_4, image_1_4:image_3_4, :]
+                        .reshape(-1, 3)
+                        .type(torch.float),
                         self.lego_train.all_rays_direction.reshape(
                             len(self.lego_train),
                             self.lego_train.img_shape[0],
                             self.lego_train.img_shape[1],
                             3,
-                        )[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(
-                            -1, 3
-                        ).type(torch.float),
-                        
+                        )[:, image_1_4:image_3_4, image_1_4:image_3_4, :]
+                        .reshape(-1, 3)
+                        .type(torch.float),
                         self.lego_train.all_rgbs.reshape(
                             len(self.lego_train),
                             self.lego_train.img_shape[0],
                             self.lego_train.img_shape[1],
                             3,
-                        )[:, image_1_4:image_3_4, image_1_4:image_3_4, :].reshape(
-                            -1, 3
-                        ).type(torch.float),
+                        )[:, image_1_4:image_3_4, image_1_4:image_3_4, :]
+                        .reshape(-1, 3)
+                        .type(torch.float),
                     ),
                     dim=1,
                 ),
@@ -217,9 +215,15 @@ class LegoDataset(Dataset):
         if self.split == "train":
             # Use data in buffers
             sample = {
-                "rays_origin": self.all_rays_origin.reshape(len(self),self.img_shape[0], self.img_shape[1], 3)[idx],
-                "rays_direction": self.all_rays_direction.reshape(len(self),self.img_shape[0], self.img_shape[1], 3)[idx],
-                "rgbs": self.all_rgbs.reshape(len(self),self.img_shape[0], self.img_shape[1], 3)[idx],
+                "rays_origin": self.all_rays_origin.reshape(
+                    len(self), self.img_shape[0], self.img_shape[1], 3
+                )[idx],
+                "rays_direction": self.all_rays_direction.reshape(
+                    len(self), self.img_shape[0], self.img_shape[1], 3
+                )[idx],
+                "rgbs": self.all_rgbs.reshape(
+                    len(self), self.img_shape[0], self.img_shape[1], 3
+                )[idx],
             }
             # sample = torch.cat((self.all_rays_origin[idx].reshape(-1, 3), self.all_rays_direction[idx].reshape(-1, 3), self.all_rgbs[idx].reshape(-1, 3)), dim=1)
         else:
@@ -239,9 +243,13 @@ class LegoDataset(Dataset):
             )
 
             sample = {
-                "rays_origin": rays_origin.reshape(self.img_shape[0],self.img_shape[1], 3),
-                "rays_direction": rays_direction.reshape(self.img_shape[0],self.img_shape[1], 3),
-                "rgbs": img.reshape(self.img_shape[0],self.img_shape[1], 3),
+                "rays_origin": rays_origin.reshape(
+                    self.img_shape[0], self.img_shape[1], 3
+                ),
+                "rays_direction": rays_direction.reshape(
+                    self.img_shape[0], self.img_shape[1], 3
+                ),
+                "rgbs": img.reshape(self.img_shape[0], self.img_shape[1], 3),
                 # "c2w": camera2world.reshape(self.img_shape[0],self.img_shape[1],3),
             }
 
