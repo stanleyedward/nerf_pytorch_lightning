@@ -1,3 +1,10 @@
+- fix datatype issue buy changing dataloader input to .type(torch.float)
+
+0. fix dataset class __get_item__ to return [100, 400, 400, 3] for all so they can be indexed
+- for dataloader reshape the input to (-1, 3)
+
+
+
 1. use warmpup dataloader on the first training epoch:
 - only input the central rays
 - to prevent mode collapse and better convergence

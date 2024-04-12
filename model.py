@@ -7,13 +7,14 @@ from rendering import rendering
 
 
 class NeRFLightning(L.LightningModule):
-    def __init__(self, learning_rate, tn, tf, nb_bins):
+    def __init__(self, learning_rate = 1e-3, tn = 2.0, tf = 6.0, nb_bins = 100, gamma = 0.5):
         super().__init__()
         self.nerf = Nerf()
         self.learning_rate = learning_rate
         self.tn = tn
         self.tf = tf
         self.nb_bins = nb_bins
+        self.gamma = gamma
         self.training_step_outputs = []
 
     def forward(self, xyz, direction):
@@ -76,7 +77,7 @@ class NeRFLightning(L.LightningModule):
             params=self.nerf.parameters(), lr=self.learning_rate
         )
         self.scheduler = torch.optim.lr_scheduler.MultiStepLR(
-            optimizer, milestones=[5, 10], gamma=0.5
+            optimizer, milestones=[5, 10], gamma=self.gamma
         )
         return optimizer
 

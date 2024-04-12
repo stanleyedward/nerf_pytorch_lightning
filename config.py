@@ -18,3 +18,16 @@ SAVE_DIR = "images"
 DATA_DIR = 'dataset/lego/'
 IMG_SIZE = 200
 BATCH_SIZE = 1024
+
+#model
+LEARNING_RATE = 1e-3
+TN = 2
+TF = 6
+NB_BINS = 100
+GAMMA = 0.5
+
+#trainer
+ACCELERATOR = 'gpu'
+DEVICES = [0]  # int(torch.cuda.isavailable())
+MAX_EPOCHS = 16
+PRECISION = "32"

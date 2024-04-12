@@ -3,7 +3,8 @@ final_images/
 test_img/
 dataset
 test.py
-test.ipynb
+test.
+lightning_logs
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
