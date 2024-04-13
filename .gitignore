@@ -6,6 +6,7 @@ test.py
 test.
 lightning_logs/
 logs/
+nerf_test/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

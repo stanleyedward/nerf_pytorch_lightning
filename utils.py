@@ -143,8 +143,6 @@ def test(
         )  # no need for .data as there are no gradients!
 
         if target is not None:
-            # mse = nn.MSELoss()
-            # loss = mse(image, target)
             loss = ((image - target) ** 2).mean()  # same as mean squared errorfunction
             psnr = mse2psnr(loss)
 
