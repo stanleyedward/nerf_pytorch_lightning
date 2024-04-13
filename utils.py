@@ -3,6 +3,9 @@ import matplotlib.pyplot as plt
 from pathlib import Path
 import torch
 from typing import Tuple
+from pathlib import Path
+from rendering import rendering
+from loss import mse2psnr
 
 
 def plot_rays(origin, direction, t) -> None:
@@ -73,3 +76,91 @@ def set_seeds(seed: int = 42):
 
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
+
+
+@torch.inference_mode()
+def test(
+    model,
+    origin,
+    direction,
+    tn,
+    tf,
+    image_index,
+    nb_bins=100,
+    chunk_size=20,
+    height=400,
+    width=400,
+    target=None,
+    outputs_dir=None,
+    title=True,
+):
+    """_summary_
+
+    Args:
+        model (_type_): _description_
+        origin (_type_): [Height*Width, 3]
+        direction (_type_): [Height*Width, 3]
+        tn (_type_): _description_
+        tf (_type_): _description_
+        image_index (_type_): _description_
+        nb_bins (int, optional): _description_. Defaults to 100.
+        chunk_size (int, optional): _description_. Defaults to 20.
+        height (int, optional): _description_. Defaults to 400.
+        width (int, optional): _description_. Defaults to 400.
+        target (_type_, optional): [Height,Width, 3]. Defaults to None.
+        outputs_dir (_type_, optional): _description_. Defaults to None.
+        title (bool, optional): _description_. Defaults to True.
+
+    Returns:
+        _type_: _description_
+    """
+    save_dir = Path(outputs_dir)
+    save_dir.mkdir(exist_ok=True, parents=True)
+
+    with torch.inference_mode():
+        model.eval()
+        origin = origin.chunk(chunk_size)
+        direction = direction.chunk(chunk_size)
+
+        image = []
+        for origin_batch, direction_batch in zip(
+            origin, direction
+        ):  # zip to interate both lists at the same time
+            img_batch = rendering(
+                model,
+                origin_batch,
+                direction_batch,
+                tn,
+                tf,
+                nb_bins,
+                device=origin_batch.device,
+            )
+            image.append(img_batch)  # [N, 3]
+
+        image = torch.cat(image)  # [H*W, 3]
+        image = (
+            image.reshape(height, width, 3).cpu().numpy()
+        )  # no need for .data as there are no gradients!
+
+        if target is not None:
+            # mse = nn.MSELoss()
+            # loss = mse(image, target)
+            loss = ((image - target) ** 2).mean()  # same as mean squared errorfunction
+            psnr = mse2psnr(loss)
+
+            if outputs_dir is not None:
+                if title:
+                    plt.title(f"MSE: {loss:.4f} || PSNR: {psnr:.4f}")
+                plt.imshow(image)
+                plt.savefig(
+                    f"{outputs_dir}/lego_{image_index}.png", bbox_inches="tight"
+                )
+            return image, loss, psnr
+
+        else:
+            if outputs_dir is not None:
+                plt.imshow(image)
+                plt.savefig(
+                    f"{outputs_dir}/lego_{image_index}.png", bbox_inches="tight"
+                )
+            return image
