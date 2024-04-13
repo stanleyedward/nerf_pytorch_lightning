@@ -6,6 +6,7 @@ from typing import Tuple
 from pathlib import Path
 from rendering import rendering
 from loss import mse2psnr
+from typing import Optional, Union
 
 
 def plot_rays(origin, direction, t) -> None:
@@ -39,126 +40,130 @@ def save_model(model: torch.nn.Module, target_dir: str, model_name: str) -> None
     torch.save(obj=model.state_dict(), f=model_save_path)
 
 
-def get_ray_directions(height: int, width: int, focus: int):
+def get_ray_directions(height: int, width: int, focus: int) -> np.ndarray:
     # coord grid
     u = np.arange(width)
     v = np.arange(height)
     u, v = np.meshgrid(u, v)  # u.shape & v.shape = [H, W]
-
+    
     # direction
     x = u - (width / 2)
     y = v - (height / 2)
     z = np.ones_like(u) * focus
-
+    
     directions = np.stack(
         (x, -y, -z), axis=-1  # -ve as we want y downwards
     )  # -ve as were looking down throught -z axis
-
+    
     return directions
 
+def get_rays(height: int, width: int, directions: np.ndarray, camera2world=None) -> Tuple[torch.Tensor, torch.Tensor]:
+    """
+    Compute rays origin and direction.
 
-def get_rays(height: int, width: int, directions, camera2world=None):
+    Args:
+        height (int): Height of the image.
+        width (int): Width of the image.
+        directions (np.ndarray): Array of shape (height, width, 3) representing the ray directions.
+        camera2world (Optional[np.ndarray], optional): Camera to world transformation matrix. Defaults to None.
+
+    Returns:
+        Tuple[torch.Tensor, torch.Tensor]: Tuple containing the rays origin and direction as torch tensors.
+    """
     rays_origin = np.zeros((height * width, 3))
     rays_direction = np.zeros((height * width, 3))
-
+    
     if camera2world is not None:
         directions = (camera2world[:3, :3] @ directions[..., None]).squeeze(-1)
         rays_origin += camera2world[:3, 3].numpy()
-
+    
     # normalization
     rays_direction = directions / np.linalg.norm(directions, axis=-1, keepdims=True)
     rays_direction = rays_direction.reshape(-1, 3)
-
+    
     return torch.tensor(rays_origin), torch.tensor(rays_direction)
 
-
-def set_seeds(seed: int = 42):
+def set_seeds(seed: int = 42) -> None:
 
     torch.manual_seed(seed)
     torch.cuda.manual_seed(seed)
 
-
 @torch.inference_mode()
 def test(
-    model,
-    origin,
-    direction,
-    tn,
-    tf,
-    image_index,
-    nb_bins=100,
-    chunk_size=20,
-    height=400,
-    width=400,
-    target=None,
-    outputs_dir=None,
-    title=True,
-):
-    """_summary_
+        model,
+        origin: torch.Tensor,
+        direction: torch.Tensor,
+        tn: float,
+        tf: float,
+        image_index: int,
+        nb_bins: int = 100,
+        chunk_size: int = 20,
+        height: int = 400,
+        width: int = 400,
+        target: Optional[torch.Tensor] = None,
+        outputs_dir: Optional[str] = None,
+        title: bool = True
+    ) -> Union[torch.Tensor, Tuple[torch.Tensor, float, float]]:
+        """_summary_
 
-    Args:
-        model (_type_): _description_
-        origin (_type_): [Height*Width, 3]
-        direction (_type_): [Height*Width, 3]
-        tn (_type_): _description_
-        tf (_type_): _description_
-        image_index (_type_): _description_
-        nb_bins (int, optional): _description_. Defaults to 100.
-        chunk_size (int, optional): _description_. Defaults to 20.
-        height (int, optional): _description_. Defaults to 400.
-        width (int, optional): _description_. Defaults to 400.
-        target (_type_, optional): [Height,Width, 3]. Defaults to None.
-        outputs_dir (_type_, optional): _description_. Defaults to None.
-        title (bool, optional): _description_. Defaults to True.
+        Args:
+            model (torch.nn.Module): _description_
+            origin (torch.Tensor): [Height*Width, 3]
+            direction (torch.Tensor): [Height*Width, 3]
+            tn (float): _description_
+            tf (float): _description_
+            image_index (int): _description_
+            nb_bins (int, optional): _description_. Defaults to 100.
+            chunk_size (int, optional): _description_. Defaults to 20.
+            height (int, optional): _description_. Defaults to 400.
+            width (int, optional): _description_. Defaults to 400.
+            target (Optional[torch.Tensor], optional): [Height,Width, 3]. Defaults to None.
+            outputs_dir (Optional[str], optional): _description_. Defaults to None.
+            title (bool, optional): _description_. Defaults to True.
 
-    Returns:
-        _type_: _description_
-    """
-    save_dir = Path(outputs_dir)
-    save_dir.mkdir(exist_ok=True, parents=True)
-
-    with torch.inference_mode():
-        model.eval()
-        origin = origin.chunk(chunk_size)
-        direction = direction.chunk(chunk_size)
-
-        image = []
-        for origin_batch, direction_batch in zip(
-            origin, direction
-        ):  # zip to interate both lists at the same time
-            img_batch = rendering(
-                model,
-                origin_batch,
-                direction_batch,
-                tn,
-                tf,
-                nb_bins,
-                device=origin_batch.device,
-            )
-            image.append(img_batch)  # [N, 3]
-
-        image = torch.cat(image)  # [H*W, 3]
-        image = (
-            image.reshape(height, width, 3).cpu().numpy()
-        )  # no need for .data as there are no gradients!
-
-        if target is not None:
-            loss = ((image - target) ** 2).mean()  # same as mean squared errorfunction
-            psnr = mse2psnr(loss)
-
-            if outputs_dir is not None:
-                if title:
-                    plt.title(f"MSE: {loss:.4f} || PSNR: {psnr:.4f}")
-                plt.imshow(image)
-                plt.savefig(
-                    f"{outputs_dir}/lego_{image_index}.png", bbox_inches="tight"
+        Returns:
+            Union[torch.Tensor, Tuple[torch.Tensor, float, float]]: _description_
+        """
+        save_dir = Path(outputs_dir)
+        save_dir.mkdir(exist_ok=True, parents=True)
+        with torch.inference_mode():
+            model.eval()
+            origin = origin.chunk(chunk_size)
+            direction = direction.chunk(chunk_size)
+            image = []
+            for origin_batch, direction_batch in zip(
+                origin, direction
+            ):  # zip to interate both lists at the same time
+                img_batch = rendering(
+                    model,
+                    origin_batch,
+                    direction_batch,
+                    tn,
+                    tf,
+                    nb_bins,
+                    device=origin_batch.device,
                 )
-            return image, loss, psnr
-
-        else:
-            if outputs_dir is not None:
-                plt.imshow(image)
-                plt.savefig(
-                    f"{outputs_dir}/lego_{image_index}.png", bbox_inches="tight"
-                )
-            return image
+                image.append(img_batch)  # [N, 3]
+            image = torch.cat(image)  # [H*W, 3]
+            image = (
+                image.reshape(height, width, 3).cpu().numpy()
+            )  # no need for .data as there are no gradients!
+            if target is not None:
+                loss = ((image - target) ** 2).mean()  # same as mean squared errorfunction
+                psnr = mse2psnr(torch.tensor(loss))
+                if outputs_dir is not None:
+                    if title:
+                        plt.title(f"MSE: {loss:.4f} || PSNR: {psnr:.4f}")
+                    plt.imshow(image)
+                    plt.savefig(
+                        f"{outputs_dir}/lego_{image_index}.png", bbox_inches="tight"
+                    )
+                return image, loss, psnr
+            else:
+                if outputs_dir is not None:
+                    plt.imshow(image)
+                    plt.savefig(
+                        f"{outputs_dir}/lego_{image_index}.png", bbox_inches="tight"
+                    )
+                return image
+            

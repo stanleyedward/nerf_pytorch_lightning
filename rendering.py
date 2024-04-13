@@ -3,14 +3,14 @@ import torch
 
 def rendering(
     model,
-    rays_origin,
-    rays_direction,
-    tn,
-    tf,
-    nb_bins=100,
-    device="cpu",
-    white_background=True,
-):
+    rays_origin: torch.Tensor,
+    rays_direction: torch.Tensor,
+    tn: float,
+    tf: float,
+    nb_bins: int = 100,
+    device: str = "cpu",
+    white_background: bool = True,
+) -> torch.Tensor:
     t = torch.linspace(tn, tf, nb_bins).to(device)  # [nb_bins]
     delta = torch.cat(
         (t[1:] - t[:-1], torch.tensor([1e10], device=device))
@@ -56,9 +56,8 @@ def rendering(
     return color
 
 
-def compute_accumulated_transmittance(betas):
+def compute_accumulated_transmittance(betas: torch.Tensor) -> torch.Tensor:
     accumulated_transmittance = torch.cumprod(betas, 1)
-
     return torch.cat(
         (
             torch.ones(
