@@ -1,6 +1,5 @@
 1. create testing functions
-2. type annotations
-3. inference using '.ckpt' model 
+
+2. inference using '.ckpt' model 
     - try loading the statedict to infer using normal torch
     - try infering directly through lightning\
-4. try data parallel to render images in testing()

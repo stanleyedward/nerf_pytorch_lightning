@@ -20,7 +20,7 @@ from config import (
 
 if __name__ == "__main__":
     dm = LegoDataModule(
-        data_dir=DATA_DIR, img_size=(50, 50), batch_size=1024, num_workers=3
+        data_dir=DATA_DIR, img_size=(400, 400), batch_size=1024, num_workers=3
     )
     model = NeRFLightning(LEARNING_RATE, TN, TF, NB_BINS, GAMMA)
     wandb_logger = WandbLogger(project="LegoNeRF", save_dir="logs/")
@@ -29,7 +29,7 @@ if __name__ == "__main__":
         accelerator=ACCELERATOR,
         devices=DEVICES,
         precision=PRECISION,
-        max_epochs=2,
+        max_epochs=MAX_EPOCHS,
         min_epochs=0,
         fast_dev_run=False,
         reload_dataloaders_every_n_epochs=1,
