@@ -21,6 +21,9 @@ MAX_EPOCHS:int = 16
 PRECISION:str = "32"
 STRATEGY:str = "ddp"
 
+#3d reconstruction
+SCALE:float = 1.5
+
 
 """------------------------Sphere Config------------------------"""
 # HEIGHT:int = 400
