@@ -106,5 +106,6 @@ dependencies:
       - traitlets==5.14.2
       - trimesh==4.2.3
       - typing-extensions==4.11.0
+      - wandb==0.16.6
       - wcwidth==0.2.13
       - yarl==1.9.4
