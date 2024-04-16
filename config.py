@@ -4,20 +4,20 @@ import torch
 """------------------------NeRF Config------------------------"""
 # data
 DATA_DIR: str = "dataset/lego/"
-IMG_SIZE: int = 50
-BATCH_SIZE: int = 1024
+IMG_SIZE: int = 400
+BATCH_SIZE: int = 3072
 
 # model
 LEARNING_RATE: float = 5e-4
 TN: float = 2.0
 TF: float = 6.0
-NB_BINS: int = 100
+NB_BINS: int = 192
 GAMMA: float = 0.5
 
 # trainer
 ACCELERATOR: str = "gpu"
 DEVICES: int = torch.cuda.device_count()
-MAX_EPOCHS: int = 16
+MAX_EPOCHS: int = 17
 PRECISION: str = "32"
 STRATEGY: str = "ddp"
 LOGS_DIR:str = "logs/"

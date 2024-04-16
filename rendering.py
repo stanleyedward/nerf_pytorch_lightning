@@ -19,7 +19,7 @@ def rendering(
         -1
     ) * rays_direction.unsqueeze(1)
 
-    if type(model).__name__ == "Nerf":
+    if type(model).__name__ == "Nerf" or type(model).__name__ == "NeRFLightning":
         colors, density = model.intersect(
             x.reshape(-1, 3),
             rays_direction.expand(x.shape[1], x.shape[0], 3)
