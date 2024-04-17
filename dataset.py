@@ -43,8 +43,8 @@ class LegoDataModule(L.LightningDataModule):
         #     )
 
     def train_dataloader(self) -> TRAIN_DATALOADERS:
-        image_1_4 = int(self.lego_train.img_shape[0] * (1 / 4))
-        image_3_4 = int(self.lego_train.img_shape[0] * (3 / 4))
+        image_1_4 = int(self.lego_train.img_shape[0] * (1 / 4)) + 50
+        image_3_4 = int(self.lego_train.img_shape[0] * (3 / 4)) - 50
 
         if self.trainer.current_epoch == 0:
             print("\n[INFO] Warmup Dataloader")

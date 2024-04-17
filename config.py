@@ -20,7 +20,7 @@ DEVICES: int = torch.cuda.device_count()
 MAX_EPOCHS: int = 17
 PRECISION: str = "32"
 STRATEGY: str = "ddp"
-LOGS_DIR:str = "logs/"
+LOGS_DIR: str = "logs/"
 
 # 3d reconstruction
 SCALE: float = 1.5
