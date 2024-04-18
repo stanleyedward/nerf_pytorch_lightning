@@ -9,28 +9,36 @@ A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method b
 
 ### Results
 TODO 
-- output gifs
-
-<div align="center">
+- Testing Render
+<!--<div align="center">
   <img src="images/lego_16_epoch_400.gif" alt="Image">
-</div>
-
-- add Training loss and PSNR graphs
-
+</div>-->
 <table>
   <tr>
-    <td align="center"><img width="800" alt="scene4-ambient" src="images/loss_wandb_graph.png"><br>Loss</td>
-    <td align="center"><img width="800" alt="scene4-diffuse" src="images/psnr_wandb_graph.png"><br>PSNR</td>
+    <td align="center"><img width="800" alt="nerf_output" src="images/lego_16_epoch_400.gif"><br>Testing Output</td>
   </tr>
 </table>
 
-- Mention Device used: TITAN X (Pascal) 250W / 12GB VRAM
+- Training: Loss and PSNR graphs
 
-- time to complete: 12h 30m
+<table>
+  <tr>
+    <td align="center"><img width="800" alt="loss" src="images/loss_wandb_graph.png"><br>Loss</td>
+    <td align="center"><img width="800" alt="psnr" src="images/psnr_wandb_graph.png"><br>PSNR</td>
+  </tr>
+</table>
+
+- Device used: TITAN X (Pascal) 250W / 12GB RAM
+
+- Time to train: 12h 30m
  
 - Run: https://wandb.ai/stanleyedward/LegoNeRF/runs/h6yb8pnb/overview
 
 - Project: https://wandb.ai/stanleyedward/LegoNeRF/
+
+- Testing Scores: 
+    - Avg Loss: 0.0012457877128773586
+    - Avg PSNR: 29.200356294523996
 
 ### Setup
 1. #### Clone and cd into the repository:
@@ -98,7 +106,6 @@ TODO
     ```sh
     python eval.py
     ```
-
 
 
 ### References and Citations
