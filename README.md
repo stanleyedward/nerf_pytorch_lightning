@@ -1,12 +1,36 @@
 # Neural Radiance Fields
-A neural radiance field (NeRF) is a method based on deep learning for reconstructing a three-dimensional representation of a scene from sparse two-dimensional images. The NeRF model enables learning of novel view synthesis, scene geometry, and the reflectance properties of the scene. 
+A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method based on deep learning for reconstructing a three-dimensional representation of a scene from sparse two-dimensional images. The NeRF model enables learning of novel view synthesis, scene geometry, and the reflectance properties of the scene. 
 
-1. [Setup](#Setup)
-2. [Training](#Training)
-3. [Evaluation](#Evaluation)
-4. [Results](#Results)
+1. [Results](#Results)
+2. [Setup](#Setup)
+3. [Training](#Training)
+4. [Evaluation](#Evaluation)
 5. [References and Citations](#References-and-Citations)
 
+### Results
+TODO 
+- output gifs
+
+<div align="center">
+  <img src="images/lego_16_epoch_400.gif" alt="Image">
+</div>
+
+- add Training loss and PSNR graphs
+
+<table>
+  <tr>
+    <td align="center"><img width="800" alt="scene4-ambient" src="images/loss_wandb_graph.png"><br>Loss</td>
+    <td align="center"><img width="800" alt="scene4-diffuse" src="images/psnr_wandb_graph.png"><br>PSNR</td>
+  </tr>
+</table>
+
+- Mention Device used: TITAN X (Pascal) 250W / 12GB VRAM
+
+- time to complete: 12h 30m
+ 
+- Run: https://wandb.ai/stanleyedward/LegoNeRF/runs/h6yb8pnb/overview
+
+- Project: https://wandb.ai/stanleyedward/LegoNeRF/
 
 ### Setup
 1. #### Clone and cd into the repository:
@@ -75,26 +99,10 @@ A neural radiance field (NeRF) is a method based on deep learning for reconstruc
     python eval.py
     ```
 
-### Results
-TODO 
-- output gifs
-
-![alt text](images/lego_16_epoch_400.gif)
-
-- add Training loss and PSNR graphs
-
-![alt text](images/loss_wandb_graph.png)
-![alt text](images/psnr_wandb_graph.png)
-
-- Mention Device used: TITAN X (Pascal) 250W / 12GB VRAM
-
-- time to complete: 12h 30m
- 
-- Run: https://wandb.ai/stanleyedward/LegoNeRF/runs/h6yb8pnb/overview
-
-- Project: https://wandb.ai/stanleyedward/LegoNeRF/
 
 
 ### References and Citations
 
 - Neural radiance field. (2024, April 18). In Wikipedia. https://en.wikipedia.org/wiki/Neural_radiance_field
+- Mildenhall, B., Srinivasan, P. P., Tancik, M., Barron, J. T., Ramamoorthi, R., & Ng, R. (2020). NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis. ArXiv. /abs/2003.08934
+
