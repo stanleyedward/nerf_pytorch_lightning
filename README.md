@@ -1,20 +1,18 @@
 # Neural Radiance Fields
 A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method based on deep learning for reconstructing a three-dimensional representation of a scene from sparse two-dimensional images. The NeRF model enables learning of novel view synthesis, scene geometry, and the reflectance properties of the scene. 
 
-1. [Results](#Results)
-2. [Setup](#Setup)
-3. [Training](#Training)
-4. [Evaluation](#Evaluation)
-5. [References and Citations](#References-and-Citations)
-
-### Results
+1. [Setup](#Setup)
+2. [Training](#Training)
+3. [Evaluation](#Evaluation)
+4. [References and Citations](#References-and-Citations)
 
 <!--<div align="center">
   <img src="images/lego_16_epoch_400.gif" alt="Image">
 </div>-->
 <table>
   <tr>
-    <td align="center"><img width="500" alt="nerf_output" src="images/lego_16_epoch_400.gif"><br>Novel Views</td>
+    <td align="center"><img width="350" alt="nerf_output" src="images/lego_16_epoch_400.gif"><br>Novel Views</td>
+    <!--<td align="center"><img width="700" alt="sphere" src="images/sphere_loss.gif"><br>Sphere</td>-->
   </tr>
 </table>
 
