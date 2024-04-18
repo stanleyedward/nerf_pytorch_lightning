@@ -85,7 +85,10 @@ def get_rays(
     rays_direction = directions / np.linalg.norm(directions, axis=-1, keepdims=True)
     rays_direction = rays_direction.reshape(-1, 3)
 
-    return torch.tensor(rays_origin), torch.tensor(rays_direction)
+    return (
+        torch.Tensor(rays_origin).clone().detach(),
+        torch.Tensor(rays_direction).clone().detach(),
+    )
 
 
 def set_seeds(seed: int = 42) -> None:
@@ -161,18 +164,19 @@ def test(
                 if metrics:
                     plt.title(f"MSE: {loss:.4f} || PSNR: {psnr:.4f}")
                 plt.axis(False)
-                plt.imshow(image)
+                plt.imshow(image.clip(0, 1))
                 plt.savefig(
                     f"{outputs_dir}/lego_{image_index}.png", bbox_inches="tight"
                 )
             return image, loss, psnr
         else:
             if outputs_dir is not None:
-                plt.imshow(image)
+                plt.imshow(image.clip(0, 1))
                 plt.savefig(
                     f"{outputs_dir}/lego_{image_index}.png", bbox_inches="tight"
                 )
             return image
+
 
 def training(
     model, optimizer, scheduler, dataloader, tn, tf, nb_bins, nb_epochs, device="cpu"
@@ -208,6 +212,7 @@ def training(
 
         torch.save(model.cpu(), "models/model_nerf")
         model.to(device)
+
 
 def get_state_dict(
     model: torch.nn.Module, ckpt_dir: str, save_path=Union[None, str]
