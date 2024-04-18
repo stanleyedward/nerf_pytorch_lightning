@@ -27,7 +27,7 @@ A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method b
   </tr>
 </table>
 
-- Device used: [TITAN X (Pascal) 250W / 12GB RAM
+- Device used: [TITAN X (Pascal) 250W / 12GB RAM](outputs/gpu.txt)
 
 - Time to train: 12h 30m
  
