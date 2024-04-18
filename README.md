@@ -8,14 +8,13 @@ A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method b
 5. [References and Citations](#References-and-Citations)
 
 ### Results
-TODO 
-- Testing Render
+
 <!--<div align="center">
   <img src="images/lego_16_epoch_400.gif" alt="Image">
 </div>-->
 <table>
   <tr>
-    <td align="center"><img width="400" alt="nerf_output" src="images/lego_16_epoch_400.gif"><br>Testing Output</td>
+    <td align="center"><img width="500" alt="nerf_output" src="images/lego_16_epoch_400.gif"><br>Novel Views</td>
   </tr>
 </table>
 
@@ -28,13 +27,11 @@ TODO
   </tr>
 </table>
 
-- Device used: TITAN X (Pascal) 250W / 12GB RAM
+- Device used: [TITAN X (Pascal) 250W / 12GB RAM
 
 - Time to train: 12h 30m
  
-- Run: https://wandb.ai/stanleyedward/LegoNeRF/runs/h6yb8pnb/overview
-
-- Project: https://wandb.ai/stanleyedward/LegoNeRF/
+- Training Dashboard: https://wandb.ai/stanleyedward/LegoNeRF/runs/h6yb8pnb/overview
 
 - Testing Scores: 
     - Avg Loss: 0.0012457877128773586
