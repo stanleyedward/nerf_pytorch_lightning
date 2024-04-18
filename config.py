@@ -25,6 +25,11 @@ LOGS_DIR: str = "logs/"
 # 3d reconstruction
 SCALE: float = 1.5
 
+#eval
+CKPT_DIR:str = "models/16_epoch_192_bins_400_nerf.ckpt"
+CHUNK_SIZE:int = 20 #increase chunksize prevent CUDA out of memory errors
+OUTPUTS_DIR:str = "tesings"
+
 
 """------------------------Sphere Config------------------------"""
 # HEIGHT:int = 400
