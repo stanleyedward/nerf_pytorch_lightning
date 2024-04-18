@@ -8,14 +8,13 @@ A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method b
 5. [References and Citations](#References-and-Citations)
 
 ### Results
-TODO 
-- Testing Render
+
 <!--<div align="center">
   <img src="images/lego_16_epoch_400.gif" alt="Image">
 </div>-->
 <table>
   <tr>
-    <td align="center"><img width="800" alt="nerf_output" src="images/lego_16_epoch_400.gif"><br>Testing Output</td>
+    <td align="center"><img width="389" alt="nerf_output" src="images/lego_16_epoch_400.gif"><br>Novel Views</td>
   </tr>
 </table>
 
