@@ -172,3 +172,23 @@ def test(
                     f"{outputs_dir}/lego_{image_index}.png", bbox_inches="tight"
                 )
             return image
+
+
+def get_state_dict(
+    model: torch.nn.Module, ckpt_dir: str, save_path=Union[None, str]
+) -> torch.nn.Module:
+    checkpoint = torch.load(ckpt_dir)
+    # since keys dont align properly here
+    mapped_state_dict = {}
+    for k, v in checkpoint["state_dict"].items():
+        if k.startswith("nerf."):  # If checkpoint keys start with "nerf.", remove it
+            mapped_state_dict[k[len("nerf.") :]] = v
+        else:
+            mapped_state_dict[k] = v
+
+    model.load_state_dict(mapped_state_dict)
+
+    if save_path is not None:
+        torch.save(obj=model.state_dict(), f=save_path)
+
+    return model
