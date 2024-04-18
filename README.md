@@ -15,7 +15,7 @@ TODO
 </div>-->
 <table>
   <tr>
-    <td align="center"><img width="800" alt="nerf_output" src="images/lego_16_epoch_400.gif"><br>Testing Output</td>
+    <td align="center"><img width="400" alt="nerf_output" src="images/lego_16_epoch_400.gif"><br>Testing Output</td>
   </tr>
 </table>
 
