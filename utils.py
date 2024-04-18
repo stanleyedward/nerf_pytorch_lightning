@@ -1,13 +1,14 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from pathlib import Path
+import json
 import torch
+import numpy as np
+from tqdm import tqdm
+from pathlib import Path
 from typing import Tuple
 from pathlib import Path
-from rendering import rendering
-from loss import mse2psnr
+import matplotlib.pyplot as plt
 from typing import Optional, Union
-from tqdm import tqdm
+from loss import mse2psnr
+from rendering import rendering
 
 
 def plot_rays(origin, direction, t) -> None:
@@ -232,3 +233,12 @@ def get_state_dict(
         torch.save(obj=model.state_dict(), f=save_path)
 
     return model
+
+
+def get_avg_metrics(outputs_json_dir: str) -> Tuple[float, float]:
+    with open("outputs/nerf_testing.json", "r") as f:
+        data = json.load(f)
+
+    avg_psnr = sum(data["psnr"]) / len(data["psnr"])
+    avg_mse = sum(data["mse"]) / len(data["mse"])
+    return avg_psnr, avg_mse
