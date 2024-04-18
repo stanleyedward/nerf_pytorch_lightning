@@ -5,5 +5,5 @@ lego dataset: https://drive.google.com/drive/folders/1lrDkQanWtTznf48FCaW5lX9ToR
 
 
 ### training:
-- Run: https://wandb.ai/stanleyedward/LegoNeRF/runs/ei19d3bj?nw=nwuserstanleyedward
-- Project: https://wandb.ai/stanleyedward/LegoNeRF?nw=nwuserstanleyedward
+- Run: https://wandb.ai/stanleyedward/LegoNeRF/runs/h6yb8pnb/overview
+- Project: https://wandb.ai/stanleyedward/LegoNeRF/
