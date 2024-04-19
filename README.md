@@ -1,5 +1,5 @@
 # Neural Radiance Fields
-A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method based on deep learning for reconstructing a three-dimensional representation of a scene from sparse two-dimensional images. The NeRF model enables learning of novel view synthesis, scene geometry, and the reflectance properties of the scene. 
+> A neural radiance field ( [NeRF](https://arxiv.org/abs/2003.08934) ) is a simple fully connected network (weights are ~5MB) trained to reproduce input views of a single scene using a rendering loss. The network directly maps from spatial location and viewing direction (5D input) to color and opacity (4D output), acting as the "volume" so we can use volume rendering to differentiably render new views.
 
 1. [Setup](#Setup)
 2. [Training](#Training)
@@ -110,11 +110,18 @@ A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method b
 ### References and Citations
 
 - Neural radiance field. (2024, April 18). In Wikipedia. https://en.wikipedia.org/wiki/Neural_radiance_field
-
-- Mildenhall, B., Srinivasan, P. P., Tancik, M., Barron, J. T., Ramamoorthi, R., & Ng, R. (2020). NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis. ArXiv. /abs/2003.08934
-
-```
+  
 - https://github.com/MaximeVandegar/Papers-in-100-Lines-of-Code/tree/main/NeRF_Representing_Scenes_as_Neural_Radiance_Fields_for_View_Synthesis
+  
+```
+@misc{mildenhall2020nerf,
+    title={NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis},
+    author={Ben Mildenhall and Pratul P. Srinivasan and Matthew Tancik and Jonathan T. Barron and Ravi Ramamoorthi and Ren Ng},
+    year={2020},
+    eprint={2003.08934},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV}
+}
 ```
 
 ```
@@ -123,5 +130,16 @@ A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method b
   title={Nerf_pl: a pytorch-lightning implementation of NeRF},
   url={https://github.com/kwea123/nerf_pl/},
   year={2020},
+}
+```
+
+```
+@misc{lin2020nerfpytorch,
+  title={NeRF-pytorch},
+  author={Yen-Chen, Lin},
+  publisher = {GitHub},
+  journal = {GitHub repository},
+  howpublished={\url{https://github.com/yenchenlin/nerf-pytorch/}},
+  year={2020}
 }
 ```
