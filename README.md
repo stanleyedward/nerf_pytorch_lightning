@@ -11,8 +11,8 @@ A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method b
 </div>-->
 <table>
   <tr>
-    <td align="center"><img width="350" alt="nerf_output" src="images/lego_16_epoch_400.gif"><br>Novel Views</td>
-    <!--<td align="center"><img width="700" alt="sphere" src="images/sphere_loss.gif"><br>Sphere</td>-->
+    <td align="center"><img width="400" alt="nerf_output" src="images/lego_16_epoch_400.gif"><br>Novel Views</td>
+    <td align="center"><img width="400" alt="sphere" src="images/speed_mesh.gif"><br>3D-Mesh</td>
   </tr>
 </table>
 
