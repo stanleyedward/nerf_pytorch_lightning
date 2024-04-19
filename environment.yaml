@@ -1,4 +1,4 @@
-name: nerf_pl
+name: nerf
 channels:
   - defaults
 dependencies:

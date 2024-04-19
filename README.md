@@ -16,7 +16,7 @@ A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method b
   </tr>
 </table>
 
-- Training: Loss and PSNR graphs
+- Training graphs
 
 <table>
   <tr>
@@ -31,9 +31,11 @@ A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method b
  
 - Training Dashboard: https://wandb.ai/stanleyedward/LegoNeRF/runs/h6yb8pnb/overview
 
-- Testing Scores: 
-    - Avg Loss: 0.0012457877128773586
-    - Avg PSNR: 29.200356294523996
+   |      Testing Metrics    | Values   |
+    | :---:     |  :---:                 |
+    | **Avg Loss**  |  0.0012457877128773586 |
+    | **Avg PSNR**  |  29.200356294523996   |
+
 
 ### Setup
 1. #### Clone and cd into the repository:
@@ -47,7 +49,7 @@ A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method b
 
     ```sh
     conda env create -f environment.yaml
-    conda activate nerf_pl
+    conda activate nerf
     ```
 
 3. #### Add the dataset to the `dataset/` directory:
@@ -108,5 +110,18 @@ A neural radiance field ([NeRF](https://arxiv.org/abs/2003.08934)) is a method b
 ### References and Citations
 
 - Neural radiance field. (2024, April 18). In Wikipedia. https://en.wikipedia.org/wiki/Neural_radiance_field
+
 - Mildenhall, B., Srinivasan, P. P., Tancik, M., Barron, J. T., Ramamoorthi, R., & Ng, R. (2020). NeRF: Representing Scenes as Neural Radiance Fields for View Synthesis. ArXiv. /abs/2003.08934
 
+```
+- https://github.com/MaximeVandegar/Papers-in-100-Lines-of-Code/tree/main/NeRF_Representing_Scenes_as_Neural_Radiance_Fields_for_View_Synthesis
+```
+
+```
+@misc{queianchen_nerf,
+  author={Quei-An, Chen},
+  title={Nerf_pl: a pytorch-lightning implementation of NeRF},
+  url={https://github.com/kwea123/nerf_pl/},
+  year={2020},
+}
+```
