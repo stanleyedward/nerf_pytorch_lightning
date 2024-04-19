@@ -1,6 +1,12 @@
 # Neural Radiance Fields
 > A neural radiance field ( [NeRF](https://arxiv.org/abs/2003.08934) ) is a simple fully connected network (weights are ~5MB) trained to reproduce input views of a single scene using a rendering loss. The network directly maps from spatial location and viewing direction (5D input) to color and opacity (4D output), acting as the "volume" so we can use volume rendering to differentiably render new views.
 
+<table>
+  <tr>
+    <td align="center"><img width="800" alt="nerf_output" src="images/nerf_pipeline.jpg"><br>Pipeline</td>
+  </tr>
+</table>
+
 1. [Setup](#Setup)
 2. [Training](#Training)
 3. [Evaluation](#Evaluation)
