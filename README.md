@@ -1,5 +1,5 @@
 # Neural Radiance Fields
-> A neural radiance field ( [NeRF](https://arxiv.org/abs/2003.08934) ) is a simple fully connected network (weights are ~5MB) trained to reproduce input views of a single scene using a rendering loss. The network directly maps from spatial location and viewing direction (5D input) to color and opacity (4D output), acting as the "volume" so we can use volume rendering to differentiably render new views.
+> A neural radiance field ( [NeRF](https://arxiv.org/abs/2003.08934) ) is a simple fully connected network trained to reproduce input views of a single scene using a rendering loss. The network directly maps from spatial location and viewing direction (5D input) to colour and opacity (4D output), acting as the "volume" so we can use volume rendering to render new views differentiably.
 
 <table>
   <tr>
@@ -7,10 +7,15 @@
   </tr>
 </table>
 
-1. [Setup](#Setup)
-2. [Training](#Training)
-3. [Evaluation](#Evaluation)
-4. [References and Citations](#References-and-Citations)
+## Index
+
+1. [My Renders](#Renders)
+2. [Setup](#Setup)
+3. [Training](#Training)
+4. [Evaluation](#Evaluation)
+5. [References and Citations](#References-and-Citations)
+
+### My Renders
 
 <!--<div align="center">
   <img src="images/lego_16_epoch_400.gif" alt="Image">
@@ -115,8 +120,6 @@
 
 ### References and Citations
 
-- Neural radiance field. (2024, April 18). In Wikipedia. https://en.wikipedia.org/wiki/Neural_radiance_field
-  
 - https://github.com/MaximeVandegar/Papers-in-100-Lines-of-Code/tree/main/NeRF_Representing_Scenes_as_Neural_Radiance_Fields_for_View_Synthesis
   
 ```
