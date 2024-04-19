@@ -31,7 +31,7 @@
 
 <table>
   <tr>
-    <td align="center"><img width="800" alt="loss" src="images/loss_wandb_graph.png"><br>Loss</td>
+    <td align="center"><img width="800" alt="loss" src="images/loss_wandb_graph.png"><br>MSE</td>
     <td align="center"><img width="800" alt="psnr" src="images/psnr_wandb_graph.png"><br>PSNR</td>
   </tr>
 </table>
@@ -44,7 +44,7 @@
 
    |      Testing Metrics    | Values   |
     | :---:     |  :---:                 |
-    | **Avg Loss**  |  0.0012457877128773586 |
+    | **Avg MSE**  |  0.0012457877128773586 |
     | **Avg PSNR**  |  29.200356294523996   |
 
 
