@@ -36,7 +36,7 @@
   </tr>
 </table>
 
-- Device used: [TITAN X (Pascal) 250W / 12GB RAM](outputs/gpu.txt)
+- Device used: [TITAN X (Pascal) 250W / 12GiB RAM](outputs/gpu.txt)
 
 - Time to train: 12h 30m
  
