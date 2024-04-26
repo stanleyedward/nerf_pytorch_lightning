@@ -31,12 +31,12 @@
 
 <table>
   <tr>
-    <td align="center"><img width="800" alt="loss" src="images/loss_wandb_graph.png"><br>Loss</td>
+    <td align="center"><img width="800" alt="loss" src="images/loss_wandb_graph.png"><br>MSE</td>
     <td align="center"><img width="800" alt="psnr" src="images/psnr_wandb_graph.png"><br>PSNR</td>
   </tr>
 </table>
 
-- Device used: [TITAN X (Pascal) 250W / 12GB RAM](outputs/gpu.txt)
+- Device used: [TITAN X (Pascal) 250W / 12GiB RAM](outputs/gpu.txt)
 
 - Time to train: 12h 30m
  
@@ -44,7 +44,7 @@
 
    |      Testing Metrics    | Values   |
     | :---:     |  :---:                 |
-    | **Avg Loss**  |  0.0012457877128773586 |
+    | **Avg MSE**  |  0.0012457877128773586 |
     | **Avg PSNR**  |  29.200356294523996   |
 
 
