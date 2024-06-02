@@ -1,3 +1,4 @@
+import tinycudann as tcnn
 import torch
 from torch import nn
 import lightning as L
@@ -238,3 +239,62 @@ class Voxels(nn.Module):
 
     def intersect(self, x):
         return self.forward(x)
+
+class FullyFusedNerf(nn.Module):
+    
+    def __init__(self, Lpos=10, Ldir=4, hidden_dim=256):
+        super(FullyFusedNerf, self).__init__()
+        
+        self.block1 = tcnn.Network(Lpos * 6 + 3, 
+                                   hidden_dim, 
+                                   {"otype": "FullyFusedMLP",
+                                    "activation": "ReLU",
+                                    "output_activation": "ReLU",
+                                    "n_neurons": hidden_dim,
+                                    "n_hidden_layers": 4},)
+        
+        self.block2 = tcnn.Network(hidden_dim + Lpos * 6 + 3, 
+                                   hidden_dim + 1, 
+                                   {"otype": "FullyFusedMLP",
+                                    "activation": "ReLU",
+                                    "output_activation": "None",
+                                    "n_neurons": hidden_dim,
+                                    "n_hidden_layers": 3},)
+        
+        
+        self.rgb_head = tcnn.Network(hidden_dim + Ldir * 6 + 3, 
+                                   3, 
+                                   {"otype": "FullyFusedMLP",
+                                    "activation": "ReLU",
+                                    "output_activation": "Sigmoid",
+                                    "n_neurons": hidden_dim // 2,
+                                    "n_hidden_layers": 1},)
+        
+        self.Lpos = Lpos
+        self.Ldir = Ldir
+        
+    def positional_encoding(self, x, L):
+        out = [x]
+        for j in range(L):
+            out.append(torch.sin(2 ** j * x))
+            out.append(torch.cos(2 ** j * x))
+        return torch.cat(out, dim=1)
+            
+                                    
+        
+    def forward(self, xyz, d):
+        
+        x_emb = self.positional_encoding(xyz, self.Lpos) # [batch_size, Lpos * 6 + 3]
+        d_emb = self.positional_encoding(d, self.Ldir) # [batch_size, Ldir * 6 + 3]
+        
+        h = self.block1(x_emb) # [batch_size, hidden_dim]
+        h = self.block2(torch.cat((h, x_emb), dim=1)) # [batch_size, hidden_dim + 1]
+        sigma = h[:, -1]
+        h = h[:, :-1] # [batch_size, hidden_dim]
+        c = self.rgb_head(torch.cat((h, d_emb), dim=1))
+        
+        return c, torch.relu(sigma)
+        
+    
+    def intersect(self, x, d):
+        return self.forward(x, d)
